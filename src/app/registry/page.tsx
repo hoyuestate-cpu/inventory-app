@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { JOB_KINDS, fiscalYearOfWorkNo, yearPrefixOf } from '@/lib/kinds';
 import { currentFiscalYear, periodSheetName } from '@/lib/period';
 import { seriesStatus } from '@/lib/jobs/numbering';
+import JobNameLink from '@/components/JobNameLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,7 @@ export default async function RegistryPage({ searchParams }: PageProps<'/registr
           }
         : { workNo: { startsWith: yearPrefixOf(fy) } },
       orderBy: { workNo: 'asc' },
-      select: { workNo: true, kind: true, name: true, period: true },
+      select: { workNo: true, kind: true, name: true, period: true, daitecLedgerId: true },
     }),
   ]);
 
@@ -122,7 +123,7 @@ export default async function RegistryPage({ searchParams }: PageProps<'/registr
                     <Link href={`/jobs/${j.workNo}`} className="font-mono text-sky-700 hover:underline">
                       {j.workNo}
                     </Link>
-                    <span className="flex-1 text-zinc-800">{j.name}</span>
+                    <JobNameLink workNo={j.workNo} name={j.name} daitecLedgerId={j.daitecLedgerId} className="flex-1" />
                     {j.period ? (
                       <Link href={`/list?period=${j.period}`} className="whitespace-nowrap text-[10px] text-zinc-400 hover:underline">
                         {periodSheetName(j.period)}

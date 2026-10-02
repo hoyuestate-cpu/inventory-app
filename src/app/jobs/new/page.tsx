@@ -48,6 +48,7 @@ export default async function NewJobPage({ searchParams }: PageProps<'/jobs/new'
             amount: '',
             period,
             memo: '',
+            daitecLedgerId: '',
           }}
           periods={await periodOptions(period)}
           suggestions={suggestions}

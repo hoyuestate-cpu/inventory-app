@@ -9,6 +9,8 @@ import { periodOptions } from '@/lib/jobs/periods';
 import { jobWarnings } from '@/lib/jobs/checks';
 import { toDateInputValue } from '@/lib/wareki';
 import { formatDateTime } from '@/lib/format';
+import { daitecContractUrl } from '@/lib/daitec';
+import ExternalLinkButton from '@/components/ExternalLinkButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +22,7 @@ export default async function EditJobPage({ params }: PageProps<'/jobs/[workNo]'
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
         <p className="text-xs text-zinc-500">{kindLabel(job.kind)}</p>
         <h1 className="text-xl font-bold text-zinc-900">
@@ -28,6 +31,15 @@ export default async function EditJobPage({ params }: PageProps<'/jobs/[workNo]'
         <p className="mt-1 text-xs text-zinc-400">
           登録 {formatDateTime(job.createdAt)}／最終更新 {formatDateTime(job.updatedAt)}
         </p>
+      </div>
+        {job.daitecLedgerId && (
+          <ExternalLinkButton
+            href={daitecContractUrl(job.daitecLedgerId)}
+            label="ダイテック契約台帳"
+            iconSrc="/logos/daitec-dx.png"
+            iconAlt="ダイテック"
+          />
+        )}
       </div>
       {warnings.length > 0 && (
         <ul className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
@@ -51,6 +63,7 @@ export default async function EditJobPage({ params }: PageProps<'/jobs/[workNo]'
             amount: job.amount === null ? '' : String(Math.round(job.amount)),
             period: job.period ?? '',
             memo: job.memo ?? '',
+            daitecLedgerId: job.daitecLedgerId ?? '',
           }}
           periods={await periodOptions(job.period)}
         />

@@ -8,6 +8,7 @@ import { str } from '@/lib/form-utils';
 import { JOB_KINDS, isValidWorkNo, kindOf } from '@/lib/kinds';
 import { isValidPeriod } from '@/lib/period';
 import { parseDateInput } from '@/lib/wareki';
+import { parseDaitecLedgerId } from '@/lib/daitec';
 
 export type JobFormState = { error?: string };
 
@@ -61,6 +62,11 @@ export async function saveJob(
     if (typeof v === 'string') return { error: v };
   }
 
+  const daitecLedgerId = parseDaitecLedgerId(str(formData, 'daitecLedgerId'));
+  if (daitecLedgerId === 'invalid') {
+    return { error: 'ダイテック契約台帳は、台帳IDの数字か、台帳の画面のURL（ledgerId= を含むもの）を貼り付けてください' };
+  }
+
   const periodRaw = str(formData, 'period');
   if (periodRaw !== null && !isValidPeriod(periodRaw)) return { error: '送る月の指定が正しくありません' };
 
@@ -77,6 +83,7 @@ export async function saveJob(
     amount,
     period: periodRaw,
     memo: str(formData, 'memo'),
+    daitecLedgerId,
   };
 
   try {
