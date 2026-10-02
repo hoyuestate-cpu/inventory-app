@@ -10,20 +10,21 @@ datasource db {
 
 /// 工事（エクセルの月別シート1行＝1工事。工事番号は全シートを通じて一意）
 model Job {
-  workNo        String    @id // 工事番号（6桁。例: 264139 = 26年度・4小工事・139番）
-  kind          String // 工事番号の3桁目（1:新築 2:住宅以外 3:増改築 4:小工事 5:クレーム 6:アパート・自社 7:アパート・モデルハウス 9:販売）
-  name          String // 工事名
-  clientCode    String? // 契約先Ｃ（通常は入力不要）
-  clientName    String? // 契約先名
-  contractDate  DateTime? @db.Date // 契約年月日
-  startDate     DateTime? @db.Date // 着工年月日
-  plannedDate   DateTime? @db.Date // 竣工予定日
-  completedDate DateTime? @db.Date // 竣工年月日
-  amount        Float? // 請負額（税抜）
-  period        String? // JDLへ送る月のシート（"2026-09" = R8.9.21〜R8.10.20）。空は工事種別一覧にだけある工事
-  memo          String? // 総務用メモ（CSVには出さない）
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  workNo         String    @id // 工事番号（6桁。例: 264139 = 26年度・4小工事・139番）
+  kind           String // 工事番号の3桁目（1:新築 2:住宅以外 3:増改築 4:小工事 5:クレーム 6:アパート・自社 7:アパート・モデルハウス 9:販売）
+  name           String // 工事名
+  clientCode     String? // 契約先Ｃ（通常は入力不要）
+  clientName     String? // 契約先名
+  contractDate   DateTime? @db.Date // 契約年月日
+  startDate      DateTime? @db.Date // 着工年月日
+  plannedDate    DateTime? @db.Date // 竣工予定日
+  completedDate  DateTime? @db.Date // 竣工年月日
+  amount         Float? // 請負額（税抜）
+  period         String? // JDLへ送る月のシート（"2026-09" = R8.9.21〜R8.10.20）。空は工事種別一覧にだけある工事
+  memo           String? // 総務用メモ（CSVには出さない）
+  daitecLedgerId String? // ダイテック注文分譲クラウドDXの注文契約台帳ID（工事名から台帳へ飛ぶリンク用）
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@index([period, createdAt])
   @@index([kind])

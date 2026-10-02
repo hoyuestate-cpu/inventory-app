@@ -18,6 +18,7 @@ export type JobFormValues = {
   amount: string;
   period: string;
   memo: string;
+  daitecLedgerId: string;
 };
 
 type Suggestion = { next: string | null; last: { workNo: string; name: string } | null };
@@ -218,6 +219,17 @@ export default function JobForm({ originalWorkNo, initial, periods, suggestions,
           </select>
         </label>
       </div>
+
+      <label className="block">
+        <span className="block text-xs font-medium text-zinc-500 mb-1">ダイテック契約台帳（工事名を押すと開きます）</span>
+        <input
+          name="daitecLedgerId"
+          value={values.daitecLedgerId}
+          onChange={set('daitecLedgerId')}
+          className={inputClass}
+          placeholder="注文分譲クラウドDXで契約台帳を開いたときのURLをそのまま貼り付け（台帳IDの数字だけでもOK）"
+        />
+      </label>
 
       <label className="block">
         <span className="block text-xs font-medium text-zinc-500 mb-1">メモ（総務用・CSVには出ません）</span>

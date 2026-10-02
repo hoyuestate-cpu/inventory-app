@@ -5,6 +5,7 @@ import { formatWareki } from '@/lib/wareki';
 import { formatDateTime, formatYen } from '@/lib/format';
 import { kindLabel } from '@/lib/kinds';
 import { jobWarnings, nameOverLength } from '@/lib/jobs/checks';
+import JobNameLink from '@/components/JobNameLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,6 +80,10 @@ export default async function ListPage({ searchParams }: PageProps<'/list'>) {
         </span>
       </div>
 
+      <p className="text-xs text-zinc-500">
+        工事番号を押すと修正画面、<span className="text-sky-800">工事名（↗付き）</span>を押すとダイテックの契約台帳が開きます。台帳がまだ登録されていない工事名は修正画面が開くので、そこで登録できます。
+      </p>
+
       <section className="rounded-lg border border-zinc-200 bg-white shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-zinc-50 text-xs text-zinc-500">
@@ -106,9 +111,7 @@ export default async function ListPage({ searchParams }: PageProps<'/list'>) {
                     <span className="ml-1.5 text-[10px] text-zinc-400">{kindLabel(j.kind)}</span>
                   </td>
                   <td className="px-3 py-2 min-w-[16rem]">
-                    <Link href={`/jobs/${j.workNo}`} className="text-zinc-900 hover:underline">
-                      {j.name}
-                    </Link>
+                    <JobNameLink workNo={j.workNo} name={j.name} daitecLedgerId={j.daitecLedgerId} />
                     {over && (
                       <span className="ml-1.5 text-[10px] text-zinc-400" title="JDLの工事名は全角12文字まで">
                         全角{over}文字
