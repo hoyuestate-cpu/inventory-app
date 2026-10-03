@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { JOB_KINDS, fiscalYearOfWorkNo, yearPrefixOf } from '@/lib/kinds';
-import { currentFiscalYear, periodSheetName } from '@/lib/period';
+import { currentFiscalYear } from '@/lib/period';
+import { formatWareki } from '@/lib/wareki';
 import { seriesStatus } from '@/lib/jobs/numbering';
 import JobNameLink from '@/components/JobNameLink';
 
@@ -32,7 +33,7 @@ export default async function RegistryPage({ searchParams }: PageProps<'/registr
           }
         : { workNo: { startsWith: yearPrefixOf(fy) } },
       orderBy: { workNo: 'asc' },
-      select: { workNo: true, kind: true, name: true, period: true, daitecLedgerId: true },
+      select: { workNo: true, kind: true, name: true, contractDate: true, daitecLedgerId: true },
     }),
   ]);
 
@@ -124,13 +125,9 @@ export default async function RegistryPage({ searchParams }: PageProps<'/registr
                       {j.workNo}
                     </Link>
                     <JobNameLink workNo={j.workNo} name={j.name} daitecLedgerId={j.daitecLedgerId} className="flex-1" />
-                    {j.period ? (
-                      <Link href={`/list?period=${j.period}`} className="whitespace-nowrap text-[10px] text-zinc-400 hover:underline">
-                        {periodSheetName(j.period)}
-                      </Link>
-                    ) : (
-                      <span className="whitespace-nowrap text-[10px] text-zinc-300">送らない</span>
-                    )}
+                    <span title="契約年月日" className="whitespace-nowrap text-xs tabular-nums text-zinc-500">
+                      {j.contractDate ? formatWareki(j.contractDate) : <span className="text-zinc-300">契約日なし</span>}
+                    </span>
                   </li>
                 ))}
                 {list.length === 0 && <li className="px-4 py-3 text-xs text-zinc-400">まだありません</li>}
